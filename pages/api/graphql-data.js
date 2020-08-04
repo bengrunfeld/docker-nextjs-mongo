@@ -1,6 +1,6 @@
 import { ApolloServer, gql } from "apollo-server-micro";
 
-const data = [
+let data = [
   { id: "0", value: "18.5", timestamp: "1596530814140" },
   { id: "1", value: "22.9", timestamp: "1596617214140" },
   { id: "2", value: "28.4", timestamp: "1596703614140" },
@@ -19,7 +19,8 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    updateDataPoint(id: ID!, value: String!): DataPoint
+    updateDataPoint(id: ID!, value: String!, timestamp: String!): DataPoint
+    deleteDataPoint(id: ID!): DataPoint
   }
 `;
 
@@ -30,14 +31,27 @@ const resolvers = {
 
   Mutation: {
     updateDataPoint: (parent, args) => {
-      const item = data.reduce((a, b) => {
-        if (b.id === args.id) return b;
+      const updatedData = data.reduce((a, b) => {
+        const newItem = b.id === args.id ? args : b;
+        return [...a, newItem];
+      }, []);
 
-        return a;
-      }, {});
+      data = updatedData;
 
-      if (Object.keys(item).length === 0)
-        throw "ERROR in Mutation: No matching item in db";
+      return args;
+    },
+
+    deleteDataPoint: (parent, args) => {
+      const updatedData = data.reduce((a, b) => {
+        if (args.id === b.id) return a;
+
+        const newItem = b;
+        return [...a, newItem];
+      }, []);
+
+      data = updatedData;
+
+      return args;
     },
   },
 };

@@ -16,8 +16,3 @@ const DataPointList = ({ data }) => {
 };
 
 export default DataPointList;
-
-/* 
-
-
-      */

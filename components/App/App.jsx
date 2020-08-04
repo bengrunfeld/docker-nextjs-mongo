@@ -37,6 +37,8 @@ const App = () => {
     );
   }
 
+  console.log("==> D:", data);
+
   return (
     <PageLayout>
       <Title>Docker Next App</Title>

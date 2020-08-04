@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const Point = styled.div`
   display: flex;
+  align-items: center;
   font-family: verdana;
   font-size: 1.6rem;
   padding: 1rem;
@@ -21,3 +22,10 @@ export const Editable = styled.input`
 `;
 
 export const Text = styled.p``;
+
+export const DeleteButton = styled.button`
+  height: 3rem;
+  border: 0.2rem solid ${({ theme }) => theme.colors.darkRed};
+  background: ${({ theme }) => theme.colors.lightRed};
+  border-radius: 0.5rem;
+`;
