@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const Point = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-around;
   font-family: verdana;
   font-size: 1.6rem;
   padding: 1rem;

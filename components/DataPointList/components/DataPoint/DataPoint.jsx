@@ -29,7 +29,7 @@ const DataPoint = ({ id, value, timestamp }) => {
   const [pointValue, setPointValue] = useState(value);
   const oldValue = useRef(pointValue);
 
-  const updateCache = (
+  const updateCacheDelete = (
     cache,
     {
       data: {
@@ -54,10 +54,38 @@ const DataPoint = ({ id, value, timestamp }) => {
     });
   };
 
+  const updateCacheCreate = (
+    cache,
+    {
+      data: {
+        updateDataPoint: { id, timestamp, value },
+      },
+    }
+  ) => {
+    const { dataPoints } = cache.readQuery({
+      query: GET_DATA_POINTS,
+    });
+
+    const updatedData = [
+      ...dataPoints,
+      { id, timestamp, value, __typename: "DataPoint" },
+    ];
+
+    cache.writeQuery({
+      query: GET_DATA_POINTS,
+      data: { dataPoints: updatedData },
+    });
+  };
+
+  const [createDataPoint, { data: createData }] = useMutation(SET_DATA_POINT, {
+    update: updateCacheCreate,
+  });
+
   const [updateDataPoint, { data: updateData }] = useMutation(SET_DATA_POINT);
+
   const [deleteDataPoint, { data: deleteData }] = useMutation(
     DELETE_DATA_POINT,
-    { update: updateCache }
+    { update: updateCacheDelete }
   );
 
   const onKeyPress = e => {
@@ -66,15 +94,27 @@ const DataPoint = ({ id, value, timestamp }) => {
 
   const saveChange = e => {
     if (oldValue.current === pointValue) return;
+    if (pointValue === "") return;
+
+    if (oldValue.current === "") {
+      createDataPoint({
+        variables: { id, value: pointValue, timestamp: timestamp.toString() },
+      });
+      return;
+    }
+
+    console.log(timestamp, typeof timestamp);
 
     updateDataPoint({
-      variables: { id, value: pointValue, timestamp },
+      variables: { id, value: pointValue, timestamp: timestamp.toString() },
     });
 
     oldValue.current = pointValue;
   };
 
   const deleteItem = () => {
+    if (pointValue === "") return;
+
     deleteDataPoint({ variables: { id } });
   };
 
