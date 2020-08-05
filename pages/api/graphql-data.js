@@ -19,6 +19,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
+    createDataPoint(id: ID!, value: String!, timestamp: String!): DataPoint
     updateDataPoint(id: ID!, value: String!, timestamp: String!): DataPoint
     deleteDataPoint(id: ID!): DataPoint
   }
@@ -30,6 +31,12 @@ const resolvers = {
   },
 
   Mutation: {
+    createDataPoint: (parent, args) => {
+      data = [...data, args];
+
+      return args;
+    },
+
     updateDataPoint: (parent, args) => {
       const updatedData = data.reduce((a, b) => {
         const newItem = b.id === args.id ? args : b;

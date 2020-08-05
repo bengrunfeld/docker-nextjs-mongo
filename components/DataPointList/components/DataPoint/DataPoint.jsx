@@ -6,6 +6,16 @@ import { GET_DATA_POINTS } from "../../../App/App";
 
 import { Point, Editable, Text, DeleteButton } from "./DataPoint.styles";
 
+const CREATE_DATA_POINT = gql`
+  mutation CreateDataPoint($id: ID!, $value: String!, $timestamp: String!) {
+    createDataPoint(id: $id, value: $value, timestamp: $timestamp) {
+      id
+      value
+      timestamp
+    }
+  }
+`;
+
 const SET_DATA_POINT = gql`
   mutation UpdateDataPoint($id: ID!, $value: String!, $timestamp: String!) {
     updateDataPoint(id: $id, value: $value, timestamp: $timestamp) {
@@ -28,6 +38,29 @@ const DataPoint = ({ id, value, timestamp }) => {
   const time = new Date(parseInt(timestamp)).toLocaleString();
   const [pointValue, setPointValue] = useState(value);
   const oldValue = useRef(pointValue);
+
+  const updateCacheCreate = (
+    cache,
+    {
+      data: {
+        createDataPoint: { id, timestamp, value },
+      },
+    }
+  ) => {
+    const { dataPoints } = cache.readQuery({
+      query: GET_DATA_POINTS,
+    });
+
+    const updatedData = [
+      ...dataPoints,
+      { id, timestamp, value, __typename: "DataPoint" },
+    ];
+
+    cache.writeQuery({
+      query: GET_DATA_POINTS,
+      data: { dataPoints: updatedData },
+    });
+  };
 
   const updateCacheDelete = (
     cache,
@@ -54,32 +87,12 @@ const DataPoint = ({ id, value, timestamp }) => {
     });
   };
 
-  const updateCacheCreate = (
-    cache,
+  const [createDataPoint, { data: createData }] = useMutation(
+    CREATE_DATA_POINT,
     {
-      data: {
-        updateDataPoint: { id, timestamp, value },
-      },
+      update: updateCacheCreate,
     }
-  ) => {
-    const { dataPoints } = cache.readQuery({
-      query: GET_DATA_POINTS,
-    });
-
-    const updatedData = [
-      ...dataPoints,
-      { id, timestamp, value, __typename: "DataPoint" },
-    ];
-
-    cache.writeQuery({
-      query: GET_DATA_POINTS,
-      data: { dataPoints: updatedData },
-    });
-  };
-
-  const [createDataPoint, { data: createData }] = useMutation(SET_DATA_POINT, {
-    update: updateCacheCreate,
-  });
+  );
 
   const [updateDataPoint, { data: updateData }] = useMutation(SET_DATA_POINT);
 
