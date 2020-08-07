@@ -9,11 +9,12 @@ services:
     restart: always
     ports:
       - "3000:3000"
-    links:
+    depends_on:
       - mongo
   mongo:
     container_name: mongo
     image: mongo
+    restart: always
     volumes:
       - ./data:/data/db
     ports:
