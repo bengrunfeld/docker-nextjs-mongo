@@ -4,9 +4,27 @@ This is an example app to show you how to implement Docker with MongoDB and Next
 
 ## Usage
 
+Clone the repo and run the following commands:
+
     npm install
-    npm run dev
+    docker-compose up -d
 
-## Article
+Then navigate to `localhost:3000` in your browser.
 
-The article that explains what's going on in this app can be found here:
+This app is a basic note taking app that only allows numbers as an input. To create a new record, click on the empty input box at the bottom.
+
+To execute a Create or an Update, write the new value in the input box and then click out of it. The loss of focus will fire an event that will
+
+## Architecture and Design Notes
+
+I used Next.JS in this application for Static Rendering and general ease of use - their API Routes feature is amazing and simple.
+
+For the API layer, I used GraphQL with Apollo, because I believe it is a much better solution than REST.
+
+The database being used is Mongo. I decided not to use an ORM because that was overkill, and I'm kinda on the fence re ORM's.
+
+## Come and say Hi! 😃
+
+You can reach me on LinkedIn at following link:
+
+https://www.linkedin.com/in/bengrunfeld/
