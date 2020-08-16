@@ -1,4 +1,4 @@
-version: "2"
+version: "3"
 
 services:
   web:
@@ -7,6 +7,8 @@ services:
       dockerfile: Dockerfile
     container_name: web
     restart: always
+    volumes:
+      - ./:/src
     ports:
       - "3000:3000"
     depends_on:
@@ -19,3 +21,6 @@ services:
       - ./data:/data/db
     ports:
       - "27017:27017"
+
+volumes:
+  nodemodules: {}
