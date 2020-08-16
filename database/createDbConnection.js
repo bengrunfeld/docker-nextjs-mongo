@@ -23,9 +23,7 @@ const openDbConnection = url => {
 };
 
 const createDbConnection = async () => {
-  const host = process.env.NODE_ENV === "development" ? "localhost" : "mongo";
-
-  const url = `mongodb://${host}:27017`;
+  const url = `mongodb://mongo:27017`;
 
   try {
     return await openDbConnection(url);

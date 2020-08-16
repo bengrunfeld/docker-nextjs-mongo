@@ -1,4 +1,4 @@
-version: "2"
+version: "3"
 
 services:
   web:
@@ -7,6 +7,8 @@ services:
       dockerfile: Dockerfile
     container_name: web
     restart: always
+    volumes:
+      - ./:/usr/src/app
     ports:
       - "3000:3000"
     depends_on:
