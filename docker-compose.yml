@@ -8,7 +8,7 @@ services:
     container_name: web
     restart: always
     volumes:
-      - ./:/src
+      - ./:/usr/src/app
     ports:
       - "3000:3000"
     depends_on:
@@ -21,6 +21,3 @@ services:
       - ./data:/data/db
     ports:
       - "27017:27017"
-
-volumes:
-  nodemodules: {}
