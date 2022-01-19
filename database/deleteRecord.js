@@ -1,10 +1,10 @@
-const createRecord = (db, id) => {
+const deleteRecord = (db, id) => {
   const p = new Promise((resolve, reject) => {
     const filter = { id };
 
     db.collection(process.env.COL_NAME).deleteOne(filter, (error, results) => {
       if (error) {
-        reject({ origin: "createRecord", error });
+        reject({ origin: "deleteRecord", error });
         return;
       }
 
@@ -12,8 +12,8 @@ const createRecord = (db, id) => {
     });
   });
 
-  p.catch(error => console.log("Error in createRecord:", error));
+  p.catch(error => console.log("Error in deleteRecord:", error));
   return p;
 };
 
-export default createRecord;
+export default deleteRecord;
